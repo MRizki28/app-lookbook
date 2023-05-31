@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\VerificationMail;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +27,7 @@ class AuthController extends Controller
             return response()->json([
                 'code' => 422,
                 'message' => 'check your validation',
-                'errros' => $validation->errors()
+                'errors' => $validation->errors()
             ]);
         }
 
@@ -59,7 +60,6 @@ class AuthController extends Controller
 
     }
 
-
     public function verifyMail($email)
     {
         $data = User::where('email' , $email)->firstOrFail();
@@ -74,8 +74,6 @@ class AuthController extends Controller
         ]);
     }
 
-
-
     private function sendVerifyMail(User $user)
     
     {
@@ -86,6 +84,54 @@ class AuthController extends Controller
             'message' => 'success send mail verify'
         
         ]);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email' , 'password');
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'code' => 400,
+                'message' => 'Invalid email or password'
+            ]);
+        }
+
+        $user = User::where('email' , $request->email)->first();
+        if (!$user || !$user->email_verified_at) {
+            return response()->json([
+                'code' => 422,
+                'message' => 'email not verified',
+            ]);
+        }
+
+        $token = $user->createToken('auth_token');
+
+        if (!$this->isTokenValid($token)) {
+            Auth::logout();
+            return response()->json([
+                'code' => 400,
+                'message' => 'Token expired'
+            ]);
+        }
+
+
+        return response()->json([
+            'code' => 200,
+            'message' => 'success login',
+            'data' => $user,
+            'access_token' => $token->plainTextToken
+        ]);
+    }
+
+    private function isTokenValid($token)
+    {
+        $expirationMinutes = config('sanctum.expiration');
+
+        if ($expirationMinutes === null) {
+            return true; // Token tidak kedaluwarsa jika tidak ada batasan waktu
+        }
+        // Periksa apakah waktu pembuatan token ditambah dengan waktu kedaluwarsa masih lebih besar dari waktu saat ini
+        return $token->accessToken->created_at->addMinutes($expirationMinutes)->isFuture();
     }
 
 }
