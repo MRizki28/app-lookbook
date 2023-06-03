@@ -25,19 +25,20 @@ class LookbookController extends Controller
     public function getDataByUser()
     {
         $user = Auth::user();
-        $data = LookbookModel::where('id_user', $user->id)->first();
+        $data = LookbookModel::with('users')->where('id_user', $user->id)->get();
         return response()->json([
+            'message' => 'success',
             'data' => $data
         ]);
     }
-    
+
+
     public function createData(Request $request)
     {
         $validation = Validator::make($request->all(), [
             'date' => 'required',
             'description' => 'required'
         ]);
-
 
         if ($validation->fails()) {
             return response()->json([
@@ -69,5 +70,4 @@ class LookbookController extends Controller
             'data' => $data
         ]);
     }
-
 }

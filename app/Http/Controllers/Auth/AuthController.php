@@ -77,7 +77,7 @@ class AuthController extends Controller
     private function sendVerifyMail(User $user)
     
     {
-        $verificationUrl = url('api/v1/cms/verify-mail/' . $user->email);
+        $verificationUrl = url('v1/cms/verify-mail/' . $user->email);
         Mail::to($user->email)->send(new VerificationMail($verificationUrl));
         return response()->json([
             'code' => 200 ,
