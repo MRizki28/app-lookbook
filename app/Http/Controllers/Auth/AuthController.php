@@ -134,4 +134,19 @@ class AuthController extends Controller
         return $token->accessToken->created_at->addMinutes($expirationMinutes)->isFuture();
     }
 
+
+    public function logout(Request $request)
+    {
+        $request->user('web')->tokens()->delete();
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'code' => 200,
+            'message' => 'sucess logout and delete token access'
+        ]);
+    }
+
 }
