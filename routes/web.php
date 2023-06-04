@@ -39,9 +39,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/lookbook', function () {
         return view('pages.lookbook');
     });
-    
-
     Route::get('/cms/lookbook', [LookbookController::class, 'getAllData']);
     Route::post('/cms/lookbook/create', [LookbookController::class, 'createData']);
     Route::get('/cms/lookbook/getByUser/', [LookbookController::class , 'getDataByUser']);
+
+    Route::post('/logout' , [AuthController::class, 'logout']);
 });
