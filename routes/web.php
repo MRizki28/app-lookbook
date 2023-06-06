@@ -35,8 +35,10 @@ Route::prefix('v1')->controller(AuthController::class)->group(function () {
 
 //lookbook
 Route::group(['middleware' => ['auth:sanctum']], function () {
-
-    Route::get('/lookbook', function () {
+    Route::get('/', function () {
+        return view('pages.dashboard');
+    });
+    Route::get('/cms/backend/lookbook', function () {
         return view('pages.lookbook');
     });
     Route::get('/cms/lookbook', [LookbookController::class, 'getAllData']);
