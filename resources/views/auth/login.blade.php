@@ -53,7 +53,7 @@
                         } else {
                             console.log(data);
                             localStorage.setItem('access_token', data.access_token);
-                            showSuccessAlert('Success login', '/lookbook');
+                            showSuccessAlert('Success login', '/cms/backend/lookbook');
                         }
                     },
                     error: function(data) {
