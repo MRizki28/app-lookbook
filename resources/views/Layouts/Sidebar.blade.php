@@ -19,25 +19,11 @@
          Data
      </div>
      {{-- @if (auth()->user()->level == 'Super Admin') --}}
-     <li class="nav-item  {{ request()->is('cms/backend/author') ? 'active' : '' }}">
-         <a class="nav-link " href="{{ url('cms/backend/author') }}" data-target="#collapsePage" aria-expanded="true"
+     <li class="nav-item  {{ request()->is('cms/backend/lookbook') ? 'active' : '' }}">
+         <a class="nav-link " href="{{ url('cms/backend/lookbook') }}" data-target="#collapsePage" aria-expanded="true"
              aria-controls="collapsePage">
              <i class="fas fa-fw fa-user"></i>
-             Data Author
-         </a>
-     </li>
-     <li class="nav-item {{ request()->is('cms/backend/news') ? 'active' : '' }}">
-         <a class="nav-link " href="{{ url('cms/backend/news') }}" data-target="#collapsePage" aria-expanded="true"
-             aria-controls="collapsePage">
-             <i class="fa-solid fa-newspaper"></i>
-             Data News
-         </a>
-     </li>
-     <li class="nav-item {{ request()->is('cms/backend/event') ? 'active' : '' }}">
-         <a class="nav-link " href="{{ url('cms/backend/event') }}" data-target="#collapsePage" aria-expanded="true"
-             aria-controls="collapsePage">
-             <i class="fa-solid fa-newspaper"></i>
-             Data Event
+             Data Lookbook
          </a>
      </li>
      <!-- Logout -->
